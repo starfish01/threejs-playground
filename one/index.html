@@ -5,17 +5,41 @@
     <title>Title</title>
 </head>
 <style>
-  body {
-    margin: 0;
-  }
-  canvas {
-    width: 100%;
-    height: 100%;
-  }
+    body {
+        margin: 0;
+    }
+
+    canvas {
+        width: 100%;
+        height: 100%;
+    }
+    #platform {
+        height: 800vh;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+    #container {
+        height: 100vh;
+        width: 100%;
+        position: sticky;
+        display: flex;
+        justify-content: center;
+        top: 0;
+    }
+
 </style>
-<body>
+<body id="body">
 
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" integrity="sha512-dLxUelApnYxpLt6K2iomGngnHO83iUvZytA3YjDUCjT0HDOHKXnVYdf3hU4JjM8uEhxf9nD1/ey98U3t2vZ0qQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script></body>
+<div id="platform">
+    <div id="container"></div>
+</div>
+
+
+<script crossorigin="anonymous"
+        integrity="sha512-dLxUelApnYxpLt6K2iomGngnHO83iUvZytA3YjDUCjT0HDOHKXnVYdf3hU4JjM8uEhxf9nD1/ey98U3t2vZ0qQ=="
+        referrerpolicy="no-referrer" src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+</body>
 <script src="scripts/main.js"></script>
 </html>

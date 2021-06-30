@@ -1,27 +1,27 @@
 let scene, camera, renderer, cube, circle;
 
+
+
 function init() {
+    let image = 'img/brick_bump.jpeg';
 
-    const queryString = window.location.search;
-    const urlParams = new URLSearchParams(queryString);
-    let image = urlParams.get('image')
-
-    if (!image) {
-        image = 'img/rene.jpeg';
-    }
-
-
+    const element = document.getElementById('container');
+    console.log(element.offsetWidth);
+    console.log(element.offsetHeight);
 
     scene = new THREE.Scene();
-    camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    camera = new THREE.PerspectiveCamera(75, element.offsetWidth / element.offsetHeight, 0.1, 1000);
 
     renderer = new THREE.WebGLRenderer({antialias: true});
 
-    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setSize(element.offsetWidth, element.offsetHeight);
 
-    document.body.appendChild(renderer.domElement);
+    element.appendChild(renderer.domElement);
 
-    addCube(image);
+    // addCube(image);
+
+    addText('No', 25);
+    addText('Thanks', 50);
 
     for (let i = 0; i < 1000; i++) {
         addCircle();
@@ -30,17 +30,55 @@ function init() {
     camera.position.z = 5;
 }
 
+function addText(text, zPosition) {
+    var loader = new THREE.FontLoader();
+    loader.load( 'https://threejs.org/examples/fonts/helvetiker_regular.typeface.json', function ( font ) {
+        var geometry = new THREE.TextGeometry( text, {
+            font: font,
+            size: 1,
+            height: 0.5,
+            curveSegments: 4,
+            bevelEnabled: true,
+            bevelThickness: 0.02,
+            bevelSize: 0.05,
+            bevelSegments: 3
+        } );
+        geometry.center();
+
+        var material = new THREE.MeshNormalMaterial();
+        var mesh = new THREE.Mesh( geometry, material );
+        mesh.position.z = zPosition;
+        scene.add( mesh );
+    } );
+}
+
+window.onbeforeunload = function () {
+    window.scrollTo(0, 0);
+}
+
+
 function addCircle() {
 
-    const colour = Math.random() < 0.5 ? 0xffff00 : '#0000FF'
-
     const geometry = new THREE.CircleGeometry( 0.1, 40 );
-    const material = new THREE.MeshBasicMaterial( { color: colour } );
+    const material = new THREE.MeshBasicMaterial( { color:  getRandomColor() } );
     const circle = new THREE.Mesh( geometry, material );
     circle.position.x = Math.random() * 200 / 10 + 1 - 10;
     circle.position.y = Math.random() * 200 / 10 + 1 - 10;
+    circle.position.z = Math.random() * 100;
     scene.add( circle );
 }
+
+function getRandomColor() {
+    var letters = '0123456789ABCDEF';
+    var color = '#';
+    for (var i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+}
+
+
+
 
 function addCube(image) {
     const geometry = new THREE.BoxGeometry(2, 2, 2);
@@ -48,19 +86,43 @@ function addCube(image) {
     const texture = new THREE.TextureLoader().load(image);
     const material = new THREE.MeshBasicMaterial({map: texture});
     cube = new THREE.Mesh(geometry, material);
+    cube.position.z = 0;
 
     scene.add(cube);
+}
+function rotateCube() {
+    cube.rotation.x += 0.001;
+    cube.rotation.y += 0.002;
 }
 
 
 function animate() {
     requestAnimationFrame(animate);
-    cube.rotation.x += 0.001;
-    cube.rotation.y += 0.002;
-
-    camera.position.z += 0.005;
+    // rotateCube();
+    // camera.rotate.y = 90 * Math.PI / 180
+    //
+    // camera.position.z += 0.005;
     renderer.render(scene, camera);
 }
+
+
+document.getElementById("body").onscroll = function() {scrollFn()};
+
+function scrollFn() {
+    let scrollTop = (window.pageYOffset !== undefined) ? window.pageYOffset : (document.documentElement || document.body.parentNode || document.body).scrollTop;
+
+    camera.position.z = (scrollTop / 100) + 5;
+    // camera.position.x = (scrollTop / 1000) + 5;
+    camera.rotation.y = scrollTop / 50000;
+
+    console.log(scrollTop);
+
+    // console.log(scrollTop / 1000);
+}
+
+
+
+
 
 function onWindowResize() {
     camera.aspect = window.innerWidth/window.innerHeight;
