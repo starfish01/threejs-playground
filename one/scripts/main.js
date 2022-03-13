@@ -1,6 +1,10 @@
 let scene, camera, renderer, cube, circle;
 
 
+const loader = new GLTFLoader();
+
+
+
 
 function init() {
     let image = 'img/brick_bump.jpeg';
@@ -20,6 +24,8 @@ function init() {
 
     // addCube(image);
 
+    // loadGLTF();
+
     addText('No', 25);
     addText('Thanks', 50);
 
@@ -29,6 +35,23 @@ function init() {
 
     camera.position.z = 5;
 }
+
+
+//
+function loadGLTF() {
+    let balloonLoader = new GLTFLoader();
+    // let image = 'img/brick_bump.jpeg';
+
+    balloonLoader.load('model/untitled.gltf', (gltf) => {
+        Mesh = gltf.scene;
+        Mesh.scale.set(0.2,0.2,0.2);
+        scene.add(Mesh);
+        Mesh.position.x = 0;
+        Mesh.position.y = 10;
+        Mesh.position.z = 15;
+    });
+}
+
 
 function addText(text, zPosition) {
     var loader = new THREE.FontLoader();
@@ -119,6 +142,8 @@ function scrollFn() {
 
     // console.log(scrollTop / 1000);
 }
+
+
 
 
 
